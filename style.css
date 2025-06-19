@@ -68,7 +68,7 @@ body {
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden; /* Mencegah scrollbar dari efek-efek aneh */
+    overflow: auto; /* Mencegah scrollbar dari efek-efek aneh */
 }
 
 /* EFEK BARU: Overlay Static/Scanline */
