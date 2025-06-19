@@ -2,13 +2,16 @@
 const storyTextElement = document.getElementById('story-text');
 const choicesContainerElement = document.getElementById('choices-container');
 const imageElement = document.getElementById('scene-image');
-const gameContainer = document.getElementById('game-container'); // Ambil game-container
+const gameContainer = document.getElementById('game-container');
 const backgroundMusic = document.getElementById('background-music');
 
-let musicStarted = false;
-let typeInterval;
+// Elemen baru untuk layar pembuka
+const startScreen = document.getElementById('start-screen');
+const startButton = document.getElementById('start-button');
 
-// Definisikan alur cerita
+let typeInterval; // Variabel untuk menyimpan interval efek mengetik
+
+// Definisikan alur cerita (tetap sama)
 const storyNodes = [
     { id: 1, text: 'Anda terbangun di sebuah ruangan yang gelap dan lembap. Bau anyir menusuk hidung. Di depan Anda berdiri sebuah pintu kayu tua yang tampak rapuh. Dari baliknya terdengar bisikan-bisikan lirih.', image: 'images/door.jpg', options: [{ text: 'Mencoba membuka pintu.', nextText: 2 }, { text: 'Mencari jalan lain di sekitar ruangan.', nextText: 3 }] },
     { id: 2, text: 'ANDA TIDAK SEHARUSNYA MEMBUKA PINTU ITU!', image: 'images/jumpscare.jpg', soundEffect: 'jumpscare-sound', isJumpscare: true, options: [{ text: 'GAME OVER. Coba lagi?', nextText: 1 }] },
@@ -16,6 +19,26 @@ const storyNodes = [
     { id: 4, text: 'Dengan tangan gemetar, Anda memasukkan kunci ke lubang pintu. Terdengar bunyi "klik". Pintu terbuka sedikit, memperlihatkan lorong panjang yang remang-remang. Anda berhasil keluar dari ruangan. Namun, petualangan mengerikan Anda sepertinya baru saja dimulai...', image: 'images/hallway.jpg', options: [{ text: 'Selamat! (Untuk sekarang). Main lagi?', nextText: 1 }] },
     { id: 5, text: 'Anda mengabaikan kunci itu dan terus meraba-raba dalam kegelapan. Tiba-tiba, lantai di bawah Anda runtuh! Anda jatuh ke dalam kehampaan tak berujung.', image: '', options: [{ text: 'GAME OVER. Coba lagi?', nextText: 1 }] }
 ];
+
+// FUNGSI UNTUK MEMULAI GAME
+function startGame() {
+    // Sembunyikan layar pembuka
+    startScreen.classList.add('hidden');
+    // Tampilkan kontainer game
+    gameContainer.classList.remove('hidden');
+
+    // Putar musik latar
+    backgroundMusic.play();
+
+    // Tampilkan cerita pertama
+    showStoryNode(1);
+}
+
+// Tambahkan event listener ke tombol start
+startButton.addEventListener('click', startGame);
+
+
+// --- FUNGSI-FUNGSI LAINNYA TETAP SAMA, NAMUN ADA SEDIKIT PENYESUAIAN ---
 
 function typewriterEffect(text, options) {
     let i = 0;
@@ -32,7 +55,7 @@ function typewriterEffect(text, options) {
             clearInterval(typeInterval);
             showChoices(options);
         }
-    }, 10);
+    }, 50);
 }
 
 function showChoices(options) {
@@ -47,11 +70,9 @@ function showChoices(options) {
 function showStoryNode(storyNodeId) {
     const storyNode = storyNodes.find(node => node.id === storyNodeId);
 
-    // Hapus efek jumpscare dari node sebelumnya
     gameContainer.classList.remove('jumpscare-active');
     imageElement.classList.remove('jumpscare-glitch');
     
-    // Tampilkan gambar
     if (storyNode.image) {
         imageElement.src = storyNode.image;
         imageElement.style.display = 'block';
@@ -59,18 +80,11 @@ function showStoryNode(storyNodeId) {
         imageElement.style.display = 'none';
     }
 
-    // Cek apakah ini adalah adegan JUMPSCARE
     if (storyNode.isJumpscare) {
-        // Hentikan pengetikan teks untuk efek kejut
         clearInterval(typeInterval);
-        
-        // Tampilkan teks jumpscare secara instan dan dengan huruf besar
         storyTextElement.innerHTML = storyNode.text;
-        
-        // Sembunyikan pilihan untuk sesaat agar fokus pada jumpscare
         choicesContainerElement.innerHTML = '';
 
-        // Mainkan efek suara
         if (storyNode.soundEffect) {
             const sound = document.getElementById(storyNode.soundEffect);
             if (sound) {
@@ -79,29 +93,22 @@ function showStoryNode(storyNodeId) {
             }
         }
 
-        // Terapkan efek guncangan dan glitch
         gameContainer.classList.add('jumpscare-active');
         imageElement.classList.add('jumpscare-glitch');
 
-        // Tampilkan tombol pilihan setelah beberapa saat untuk memberi waktu pada efek
         setTimeout(() => {
             showChoices(storyNode.options);
-        }, 1500); // Tunda pilihan selama 1.5 detik
+        }, 1500);
 
     } else {
-        // Jika bukan jumpscare, jalankan alur normal dengan efek mengetik
         typewriterEffect(storyNode.text, storyNode.options);
     }
 }
 
+// Fungsi selectOption sekarang lebih sederhana
 function selectOption(option) {
-    if (!musicStarted) {
-        backgroundMusic.play();
-        musicStarted = true;
-    }
-    
     showStoryNode(option.nextText);
 }
 
-// Memulai permainan
-showStoryNode(1);
+// TIDAK ADA LAGI FUNGSI YANG DIPANGGIL OTOMATIS DI SINI
+// PERMAINAN DIMULAI OLEH TOMBOL START

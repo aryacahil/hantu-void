@@ -59,7 +59,7 @@
 /* Gaya dasar untuk seluruh halaman */
 body {
     background-color: #000000;
-    color: #a3a3a3; /* Warna teks dibuat sedikit lebih redup */
+    color: #a3a3a3; 
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
@@ -68,17 +68,53 @@ body {
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
-    overflow: auto; /* Mencegah scrollbar dari efek-efek aneh */
+    overflow-y: auto;
 }
 
-/* EFEK BARU: Overlay Static/Scanline */
+/* --- STYLE BARU UNTUK LAYAR PEMBUKA --- */
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+#start-button {
+    font-family: 'Creepster', cursive;
+    font-size: 2.5em;
+    color: #cc0000;
+    background-color: transparent;
+    border: 2px solid #cc0000;
+    padding: 20px 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(255,0,0,0.7);
+}
+
+#start-button:hover {
+    background-color: #cc0000;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,0,0,0.8);
+}
+
+.hidden {
+    display: none !important;
+}
+/* -------------------------------------- */
+
 .scanline-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Agar tidak bisa diklik */
+    pointer-events: none; 
     background: linear-gradient(rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.3) 50%), linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.02), rgba(0,0,255,0.03));
     background-size: 100% 4px, 6px 100%;
     z-index: 9999;
@@ -86,19 +122,17 @@ body {
     opacity: 0.4;
 }
 
-/* Wadah utama game */
 #game-container {
     width: 100%;
     max-width: 800px;
-    border: 2px solid #333; /* Border dibuat lebih gelap */
+    border: 2px solid #333;
     background-color: #0a0a0a;
     padding: 25px;
-    box-shadow: 0 0 30px rgba(200, 0, 0, 0.5); /* Shadow dibuat lebih intens */
+    box-shadow: 0 0 30px rgba(200, 0, 0, 0.5);
     border-radius: 3px;
-    z-index: 1; /* Pastikan game di bawah overlay */
+    z-index: 1;
 }
 
-/* --- Kelas Baru untuk Jumpscare --- */
 .jumpscare-active {
     animation: screen-shake 0.5s infinite;
 }
@@ -108,7 +142,6 @@ body {
     filter: brightness(1.5) saturate(2);
 }
 
-/* Area teks cerita dengan efek glitch */
 #story-text {
     font-size: 1.3em;
     line-height: 1.7;
@@ -117,14 +150,13 @@ body {
     padding-bottom: 20px;
     margin-bottom: 20px;
     white-space: pre-wrap;
-    color: #cc0000; /* Warna teks utama diubah menjadi merah gelap */
+    color: #cc0000;
     text-shadow: 0 0 5px rgba(255,0,0,0.5);
-    /* Terapkan animasi glitch. Hapus baris ini jika tidak suka efeknya */
     animation: text-glitch 7s linear infinite;
 }
 
 #story-text::after {
-    content: "▋"; /* Karakter blok sebagai kursor mengetik */
+    content: "▋";
     opacity: 1;
     animation: blink 0.7s infinite;
 }
@@ -133,7 +165,6 @@ body {
     50% { opacity: 0; }
 }
 
-/* Kontainer dan tombol pilihan */
 #choices-container {
     display: flex;
     flex-direction: column;
@@ -160,6 +191,5 @@ button:hover {
     transform: scale(1.02);
 }
 
-/* Sisanya sama dengan sebelumnya */
 #image-container { width: 100%; margin-bottom: 20px; }
 #scene-image { max-width: 100%; height: auto; border: 2px solid #333; display: none; border-radius: 3px; }
