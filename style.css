@@ -1,0 +1,165 @@
+/* Definisikan animasi (Keyframes) di bagian atas */
+@keyframes text-glitch {
+  0% { transform: translate(0); opacity: 1; }
+  20% { transform: translate(-2px, 2px); opacity: 0.8; }
+  40% { transform: translate(2px, -2px); opacity: 1; }
+  60% { transform: translate(-2px, -2px); opacity: 0.9; }
+  80% { transform: translate(2px, 2px); opacity: 1; }
+  100% { transform: translate(0); opacity: 1; }
+}
+
+@keyframes scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* --- Keyframes Baru untuk Jumpscare --- */
+@keyframes screen-shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes image-glitch {
+  0% {
+    clip-path: inset(50% 0 20% 0);
+    transform: translateX(-10px);
+  }
+  20% {
+    clip-path: inset(10% 0 55% 0);
+    transform: translateX(5px);
+  }
+  40% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translateX(-5px);
+  }
+  60% {
+    clip-path: inset(30% 0 40% 0);
+    transform: translateX(10px);
+  }
+  80% {
+    clip-path: inset(60% 0 15% 0);
+    transform: translateX(-5px);
+  }
+  100% {
+    clip-path: inset(50% 0 20% 0);
+    transform: translateX(0);
+  }
+}
+
+
+/* Gaya dasar untuk seluruh halaman */
+body {
+    background-color: #000000;
+    color: #a3a3a3; /* Warna teks dibuat sedikit lebih redup */
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden; /* Mencegah scrollbar dari efek-efek aneh */
+}
+
+/* EFEK BARU: Overlay Static/Scanline */
+.scanline-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Agar tidak bisa diklik */
+    background: linear-gradient(rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.3) 50%), linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.02), rgba(0,0,255,0.03));
+    background-size: 100% 4px, 6px 100%;
+    z-index: 9999;
+    animation: scanline 0.4s linear infinite;
+    opacity: 0.4;
+}
+
+/* Wadah utama game */
+#game-container {
+    width: 100%;
+    max-width: 800px;
+    border: 2px solid #333; /* Border dibuat lebih gelap */
+    background-color: #0a0a0a;
+    padding: 25px;
+    box-shadow: 0 0 30px rgba(200, 0, 0, 0.5); /* Shadow dibuat lebih intens */
+    border-radius: 3px;
+    z-index: 1; /* Pastikan game di bawah overlay */
+}
+
+/* --- Kelas Baru untuk Jumpscare --- */
+.jumpscare-active {
+    animation: screen-shake 0.5s infinite;
+}
+
+#scene-image.jumpscare-glitch {
+    animation: image-glitch 0.2s linear infinite;
+    filter: brightness(1.5) saturate(2);
+}
+
+/* Area teks cerita dengan efek glitch */
+#story-text {
+    font-size: 1.3em;
+    line-height: 1.7;
+    min-height: 160px;
+    border-bottom: 1px dashed #444;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+    color: #cc0000; /* Warna teks utama diubah menjadi merah gelap */
+    text-shadow: 0 0 5px rgba(255,0,0,0.5);
+    /* Terapkan animasi glitch. Hapus baris ini jika tidak suka efeknya */
+    animation: text-glitch 7s linear infinite;
+}
+
+#story-text::after {
+    content: "▋"; /* Karakter blok sebagai kursor mengetik */
+    opacity: 1;
+    animation: blink 0.7s infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Kontainer dan tombol pilihan */
+#choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+button {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #1a1a1a;
+    color: #999;
+    border: 1px solid #444;
+    padding: 15px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+    border-radius: 3px;
+}
+
+button:hover {
+    background-color: #b30000;
+    color: #ffffff;
+    border-color: #ff4444;
+    transform: scale(1.02);
+}
+
+/* Sisanya sama dengan sebelumnya */
+#image-container { width: 100%; margin-bottom: 20px; }
+#scene-image { max-width: 100%; height: auto; border: 2px solid #333; display: none; border-radius: 3px; }
